@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>smartphone.vn - Website điện thoại thông minh</title>
+	<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.css">
+    <script src="../bootstrap/js/jquery-3.6.4.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="../bootstrap/css/menudoc2.css">
+    <script>
+        $(document).ready(function(){
+			$("#btndangky").on("click",function(){
+				$("#modaldangky").modal("show");
+			})
+			$("#closemodal").on("click",function(){
+				$("#modaldangky").modal("hide");
+			});
+            $("#btndangnhap").on("click",function(){
+				$("#modaldangnhap").modal("show");
+			})
+            $("#closemodal").on("click",function(){
+				$("#modaldangnhap").modal("hide");
+			});
+			// viết hàm kiểm tra số điện thoại
+            // điều kiện mã sinh viên phải là số và có 10 chữ số
+            var sdt = $("#txtsdt");
+            var tbsdt = $("#tbsdt");
+            function kiemtrasodienthoai(){
+                var regsdt = /^[0-9]{10}$/;
+                if(sdt.val() == ""){
+                    tbsdt.html("* bắt buộc nhập");
+                    return false;
+                }
+                if(!regsdt.test(sdt.val())){
+                    tbsdt.html("* Số điện thoại phải là số và có 10 chữ số");
+                    return false;
+                }else{
+                    tbsdt.html("*");
+                    return true;
+                }
+            }
+            sdt.blur(kiemtrasodienthoai);
+
+            //viết hàm kiểm tra họ và tên khách hàng
+            //điều kiện phải viết hoa chữ cái đầu của mỗi từ
+            var hoten = $("#txthoten");
+            var tbhoten = $("#tbhoten");
+            function kiemtrahoten(){
+                var reghoten = /^([A-Z]{1}[a-z]*[\s]?)+$/;
+                if(hoten.val() == ""){
+                    tbhoten.html("* Bắt buộc nhập");
+                    return false;
+                }
+                if(!reghoten.test(hoten.val())){
+                    tbhoten.html("* họ và tên phải viết hoa chữ cái đầu của mỗi từ");
+                    return false;
+                }else{
+                    tbhoten.html("*");
+                    return true;
+                }
+            }
+            hoten.blur(kiemtrahoten);
+
+            //viết hàm kiểm tra ngày tham gia
+            //điều kiện ngày tham gia phải sau ngày hiện tại 7 ngày
+            var ngaythamgia = $("#txtngay");
+            var tbngaythamgia = $("#tbngay");
+            function kiemtrangaythamgia(){
+                var ngaytg = new Date(ngaythamgia.val());
+                var today = new Date();
+                if(ngaythamgia.val() == ""){
+                    tbngaythamgia.html("* bắt buộc nhập");
+                    return false;
+                }
+                if(ngaytg<today){
+                    tbngaythamgia.html("* ngày đăng ký phải sau ngày hiện tại");
+                    return false;
+                }else{
+                    tbngaythamgia.html("*");
+                    return true;
+                }
+            }
+            ngaythamgia.blur(kiemtrangaythamgia);
+
+            //viết hàm kiểm tra email 
+            //điều kiện ký tự đầu phải là chữ cái và có mẫu : xxxxxxx@gmail.com
+            var email = $("#txtemail");
+            var tbemail = $("#tbemail");
+            function kiemtraemail(){
+                var regemail = /^[a-z][a-z0-9]*@gmail.com$/;
+                if(email.val() == ""){
+                    tbemail.html("* bắt buộc nhập");
+                    return false;
+                } 
+                if(!regemail.test(email.val())){
+                    tbemail.html("* Email không hợp lệ");
+                    return false;
+                }else{
+                    tbemail.html("*");
+                    return true;
+                }
+            }
+            email.blur(kiemtraemail);
+
+
+             //viết sự kiện khi nhấn vào nút lưu, nếu tất cả thông tin điền vào hợp lệ thì sẽ thêm vào bảng của trang web
+             $("#btnluu").click(function(){
+                if(kiemtrasodienthoai() == true && kiemtrahoten() == true && kiemtrangaythamgia() == true && kiemtraemail() == true){
+                    var sdt = $("#txtsdt").val();
+                    var hoten = $("#txthoten").val();
+                    var ngaythamgia = $("#txtngay").val();
+                    var email = $("#txtemail").val();
+
+                    var stt = $("table tbody tr").length + 1;
+                    var row = "<tr><td>"+stt+"</td><td>"+sdt+"</td><td>"+hoten+"</td><td>"+ngaythamgia+"</td><td>"+email+"</td></tr>";
+
+                    //thêm row vào phần tbody của table
+                    $("table tbody").append(row);
+
+                    //hiển thị thông báo thành công
+                    alert("Đăng ký thông tin thành công!");
+
+                    //xóa thông tin vừa thêm vào bảng
+                    document.getElementById("txtsdt").value = "";
+                    document.getElementById("txthoten").value = "";
+                    document.getElementById("txtngay").value = "";
+                    document.getElementById("txtemail").value = "";
+                }else{
+                    alert("Vui lòng điền đầy đủ thông tin đăng ký!");
+                }
+            })
+		})
+    </script>
+</head>
+<body>
+	<div class="container">
+		<div class="banner">
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+             <div class="container-fluid">
+                   <a class="navbar-brand" href="#">
+                   <img src="../image/logo.png" alt="" width="180" height="36">
+                   </a>
+                   <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                   <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                         <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#" style="padding-left: 25px; padding-right: 25px;"><strong>Giỏ hàng</strong></a>
+                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#" style="padding-left: 25px; padding-right: 25px;"><strong>Tra cứu đơn hàng</strong></a>
+                         </li>
+                         <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding-left: 25px; padding-right: 25px;">
+                            <strong>Chọn địa điểm quán </strong></a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <li><a class="dropdown-item" href="#"><strong>Hà Nội</strong></a></li>
+                               <li><a class="dropdown-item" href="#"><strong>Hồ Chí Minh</strong></a></li>
+                               <li><a class="dropdown-item" href="#"><strong>Nam Định</strong></a></li>
+                            </ul>
+                          </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#" style="padding-left: 25px; padding-right: 25px;" id="btndangnhap"><strong>Đăng nhập</strong></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#" style="padding-left: 25px; padding-right: 25px;" id="btndangky"><strong>Đăng ký</strong></a>
+                            </li>
+                   </ul>
+                   <form class="d-flex">
+                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width: 200px;">
+                         <button class="btn btn-outline-success" type="submit">Search</button>
+                     </form>
+                   </div>
+             </div>
+         </nav>
+         <div class="row">
+            <div class ="col-md-12 ">
+                <div id="menu">
+                    <ul>
+                    <li><a href="../index.html"> <strong>Trang Chủ</strong></a></li>
+                    <li><a href="cuahang.html"> <strong>Sản Phẩm</strong></a></li>
+                    <li><a href="contact.html"> <strong>Liên Hệ</strong></a></li>
+                    <li><a href="FAQS.html"> <strong>FAQS</strong></a></li>
+                    <li><a href="../html/dsdangky.html"><strong>Đăng Ký</strong></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+		</div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h3 style="text-align: center;">DANH SÁCH KHÁCH HÀNG ĐÃ ĐĂNG KÝ</h3>
+                <section class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Số điện thoại</th>
+                                <th>Họ tên</th>
+                                <th>Ngày đăng ký</th>
+                                <th>Địa chỉ email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+        
+<br>
+<br>
+<br>
+ 	<div style="background:#f1f2f6; margin-top: 50px;">
+        <center>
+        <h3> <strong>Công Ty Cổ Phần TNHH A C E</strong></h3>
+        <p> <strong>Địa chỉ:</strong> Phố Cao Đạt, Hai Bà Trưng, Hà Nội </p>
+        <p> <strong>Số ĐT:</strong> 0945.199.786</p>
+        <p><strong>Mail:</strong> Aceofficial1610@gmail.com</p>
+        <p><strong>Mã số doanh nghiệp:</strong> 200219899 do Sở Kế hoạch & Đầu Tư TP Hà Nội
+Đầu ngày 17/6/2021 @2021 – Bản quyền thuộc về Công Ty Cổ Phần TNHH <strong>A C E</strong></p>
+        
+        
+        </center>
+        </div>
+    </div>
+
+
+    <div class="modal fade" role="dialog" id="modaldangky">
+        <!--tạo một cái form modal nhỏ-->
+        <div class="modal-dialog">
+            <!--nội dung của modal-->
+            <div class="modal-content">
+                <!--phần header của modal-->
+                <div class="modal-header">
+                    <h2 style="color: red; text-align: center;">THÔNG TIN ĐĂNG KÝ</h2>
+                    <button type="button" id="closemodal">x</button>
+                </div>
+                <!--phần body của modal-->
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label for="txtsdt" style="font-weight: 600;">Số điện thoại</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" name="" id="txtsdt" placeholder="Nhập số điện thoại" size="50" class="form-control">
+                            <span class="text-danger" id="tbsdt">*</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label for="txthoten" style="font-weight: 600;">Họ tên</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" name="" id="txthoten" placeholder="Nhập họ tên" size="50" class="form-control">
+                            <span class="text-danger" id="tbhoten">*</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label for="txtngay" style="font-weight: 600;">Ngày đăng ký</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="date" name="" id="txtngay" size="50" class="form-control">
+                            <span class="text-danger" id="tbngay">*</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label for="txtemail" style="font-weight: 600;">Email</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" name="" id="txtemail" size="50" placeholder="điền email: xxxxxx@gmail.com" class="form-control">
+                            <span class="text-danger" id="tbemail">*</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnluu" class="submit bg-success btn-block" style="width: 100%;">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" role="dialog" id="modaldangnhap">
+        <!--tạo một cái form modal nhỏ-->
+        <div class="modal-dialog">
+            <!--nội dung của modal-->
+            <div class="modal-content">
+                <!--phần header của modal-->
+                <div class="modal-header">
+                    <h2 style="color: red; text-align: center;">ĐĂNG NHẬP</h2>
+                    <button type="button" id="closemodal">x</button>
+                </div>
+                <!--phần body của modal-->
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label for="txtsdt" style="font-weight: 600;">Email</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" name="" id="txtemail" placeholder="nhập email" size="50" class="form-control">
+                            <span class="text-danger" id="tbemail">*</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label for="txthoten" style="font-weight: 600;">Mật khẩu</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="password" name="" id="txthoten" placeholder="" size="50" class="form-control" aria-placeholder="nhập mật khẩu">
+                            <span class="text-danger" id="tbhoten">*</span>
+                        </div>
+                    </div>
+                    
+                <div class="modal-footer">
+                    <button id="btnluu" class="submit bg-success btn-block" style="width: 100%;">Đăng nhập</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+#body{
+	font-family: sans-serif;
+	font-size: 15px;
+}
+#menu ul{
+	background:#2c3e50;
+	width: 180px;
+	padding: 0;
+	list-style-type: none;
+}
+#menu ul li{
+	color: #FFF;
+	width: auto;
+	height: 50px;
+	line-height: 40px;
+	border-bottom: 1px solid #e8e8e8;
+	padding: 0 1em;
+	position: relative;
+}
+#menu ul li a{
+	text-decoration: none;
+	color: tomato;
+	
+	color: 	#FFFACD;
+	text-decoration: none;
+	display: block;
+	text-align: center;
+}
+#menu ul li a:hover{
+	background: #40E0D0;
+	color: 	#FFFAFA;
+}
+#menu ul li >.sub-menu{
+	display: none;
+	position: absolute;
+	left: 250px;
+	top :0;
+	
+}
+#menu ul li:hover .sub-menu{
+	display: block;
+}
+.table th tr td{
+	text-align: center;
+	line-height: 50px;
+}
+#quantity{
+	background: transparent;
+	border: none;
+	outline: none;
+	color: #FFF;
+}
+#price{
+	background: transparent;
+	border: none;
+	outline: none;
+	color: #FFF;
+}
+#total{
+	background: transparent;
+	border: none;
+	outline: none;
+	color: #FFF;
+}
+.btnxoagiohang{
+	background: transparent;
+	border: none;
+	outline: none;
+	color: #FFF;
+}
+#btnthanhtoan{
+	border: 1px solid #fff;
+	color: #fff;
+	outline: none;
+	border-radius: 5px;
+	height: 40px;
+	width: 120px;
+}

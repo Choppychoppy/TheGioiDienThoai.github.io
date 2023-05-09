@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>smartphone.vn - Website điện thoại thông minh</title>
+	<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="bootstrap/css/menuDoc.css">
+	<script src="bootstrap/js/bootstrap.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<script src="bootstrap/js/jquery-3.6.4.min.js"></script>
+	<script src="bootstrap/js/themgiohang.js"></script>
+	<script src="bootstrap/js/themgiohangfileindex.js"></script>
+	<script src="bootstrap/js/all.min.js"></script>
+	<script>
+		$(document).ready(function(){
+			$("#btndangky").on("click",function(){
+				$("#modaldangky").modal("show");
+			})
+			$(".closemodal").on("click",function(){
+				$("#modalthanhtoan").modal("hide");
+			});
+			$("#btndangnhap").on("click",function(){
+				$("#modaldangnhap").modal("show");
+			})
+
+			// viết hàm kiểm tra số điện thoại
+            // điều kiện mã sinh viên phải là số và có 10 chữ số
+            var sdt = $("#txtsdt");
+            var tbsdt = $("#tbsdt");
+            function kiemtrasodienthoai(){
+                var regsdt = /^[0-9]{10}$/;
+                if(sdt.val() == ""){
+                    tbsdt.html("* bắt buộc nhập");
+                    return false;
+                }
+                if(!regsdt.test(sdt.val())){
+                    tbsdt.html("* Số điện thoại phải là số và có 10 chữ số");
+                    return false;
+                }else{
+                    tbsdt.html("*");
+                    return true;
+                }
+            }
+            sdt.blur(kiemtrasodienthoai);
+
+            //viết hàm kiểm tra họ và tên khách hàng
+            //điều kiện phải viết hoa chữ cái đầu của mỗi từ
+            var hoten = $("#txthoten");
+            var tbhoten = $("#tbhoten");
+            function kiemtrahoten(){
+                var reghoten = /^([A-Z]{1}[a-z]*[\s]?)+$/;
+                if(hoten.val() == ""){
+                    tbhoten.html("* Bắt buộc nhập");
+                    return false;
+                }
+                if(!reghoten.test(hoten.val())){
+                    tbhoten.html("* họ và tên phải viết hoa chữ cái đầu của mỗi từ");
+                    return false;
+                }else{
+                    tbhoten.html("*");
+                    return true;
+                }
+            }
+            hoten.blur(kiemtrahoten);
+
+            //viết hàm kiểm tra ngày tham gia
+            //điều kiện ngày tham gia phải sau ngày hiện tại 7 ngày
+            var ngaythamgia = $("#txtngay");
+            var tbngaythamgia = $("#tbngay");
+            function kiemtrangaythamgia(){
+                var ngaytg = new Date(ngaythamgia.val());
+                var today = new Date();
+                if(ngaythamgia.val() == ""){
+                    tbngaythamgia.html("* bắt buộc nhập");
+                    return false;
+                }
+                if(ngaytg<today){
+                    tbngaythamgia.html("* ngày đăng ký phải sau ngày hiện tại");
+                    return false;
+                }else{
+                    tbngaythamgia.html("*");
+                    return true;
+                }
+            }
+            ngaythamgia.blur(kiemtrangaythamgia);
+
+            //viết hàm kiểm tra email 
+            //điều kiện ký tự đầu phải là chữ cái và có mẫu : xxxxxxx@gmail.com
+            var email = $("#txtemail");
+            var tbemail = $("#tbemail");
+            function kiemtraemail(){
+                var regemail = /^[a-z][a-z0-9]*@gmail.com$/;
+                if(email.val() == ""){
+                    tbemail.html("* bắt buộc nhập");
+                    return false;
+                } 
+                if(!regemail.test(email.val())){
+                    tbemail.html("* Email không hợp lệ");
+                    return false;
+                }else{
+                    tbemail.html("*");
+                    return true;
+                }
+            }
+            email.blur(kiemtraemail);
+
+			var diachi = $("#txtdc");
+            var tbdiachi = $("#tbdc");
+			function kiemtradiachi(){
+                if(diachi.val() == ""){
+                    tbdiachi.html("* bắt buộc nhập");
+                    return false;
+                } 
+                else{
+                    tbdiachi.html("*");
+                    return true;
+                }
+            }
+			diachi.blur(kiemtradiachi);
+
+			//khi nhấn vào nút thanh toán
+			$("#btnthanhtoan").click(function(){
+				$("#modalthanhtoan").modal("show");
+				document.getElementById("hienthitienthanhtoan").value = tinhtongtien();
+			})
+			
+			//viết sự kiện khi click vào mua hàng
+			//ip13
+			$("#btnmua1").click(function(){
+				var anh = '<img src="image/iphone-13b.jpg" id="txtanh" style="width: 50px; height:50px;" alt="iphone13">'
+				var ten = " iphone13|Chính hãng VNA";
+                var gia = '<input type="number" id="price" name="price" value="23490000">'
+				var soluong = '<input type="number" styte="border: none; background: transparent;" id="quantity" name="quantity" min="1" max="10" step="1" value="1" oninput="calculateTotal()">'
+				var chon = '<button class="btnxoagiohang">Xóa</button>'
+				
+
+                var row = "<tr><td>"+anh+""+ten+"</td><td>"+gia+"</td><td>"+soluong+"</td><td>"+chon+"<td></tr>";
+
+
+                //thêm row vào phần tbody của table
+                $("table tbody").append(row);
+
+				//xử lý sự kiện nhấn vào nút xóa
+				$(".btnxoagiohang").click(function(){
+				var row = $(this).closest('tr');
+      			row.remove();
+				})
+
+			})
+
+			//ip11
+			$("#btnmua2").click(function(){
+				var anh = '<img src="image/iphone11c.jpg" id="txtanh" style="width: 50px; height:50px;" alt="iphone11">'
+				var ten = " iphone11|Chính hãng VNA";
+                var gia = '<input type="number" id="price" name="price" value="16000000">'
+				var soluong = '<input type="number" styte="border: none; background: transparent;" id="quantity" name="quantity" min="1" max="10" step="1" value="1" oninput="calculateTotal()">'
+				var chon = '<button class="btnxoagiohang" onclick = "deleteRow(this)">Xóa</button>'
+
+
+                var row = "<tr><td>"+anh+""+ten+"</td><td>"+gia+"</td><td>"+soluong+"</td><td>"+chon+"<td></tr>";
+
+                //thêm row vào phần tbody của table
+                $("table tbody").append(row);   
+
+				//xử lý sự kiện nhấn vào nút xóa
+				$(".btnxoagiohang").click(function(){
+				var row = $(this).closest('tr');
+      			row.remove();
+				})
+			})
+
+			//ip12
+			$("#btnmua3").click(function(){
+				var anh = '<img src="image/iphone-12f.webp" id="txtanh" style="width: 50px; height:50px;" alt="iphone12">'
+				var ten = " iphone12|Chính hãng VNA";
+				var gia = '<input type="number" id="price" name="price" value="19490000">'
+				var soluong = '<input type="number" styte="border: none; background: transparent;" id="quantity" name="quantity" min="1" max="10" step="1" value="1" oninput="calculateTotal()">'
+				var chon = '<button class="btnxoagiohang" onclick = "deleteRow(this)">Xóa</button>'
+
+
+                var row = "<tr><td>"+anh+""+ten+"</td><td>"+gia+"</td><td>"+soluong+"</td><td>"+chon+"<td></tr>";
+
+                //thêm row vào phần tbody của table
+                $("table tbody").append(row);   
+
+				//xử lý sự kiện nhấn vào nút xóa
+				$(".btnxoagiohang").click(function(){
+				var row = $(this).closest('tr');
+      			row.remove();
+				})
+			})
+
+			//ipx
+			$("#btnmua4").click(function(){
+				var anh = '<img src="image/iphonexb.jpg" id="txtanh" style="width: 50px; height:50px;" alt="iphonex">'
+				var ten = " iphoneX|Chính hãng VNA";
+                var gia = '<input type="number" id="price" name="price" value="9490000">'
+				var soluong = '<input type="number" styte="border: none; background: transparent;" id="quantity" name="quantity" min="1" max="10" step="1" value="1" oninput="calculateTotal()">'
+				var chon = '<button class="btnxoagiohang" onclick = "deleteRow(this)">Xóa</button>'
+
+
+                var row = "<tr><td>"+anh+""+ten+"</td><td>"+gia+"</td><td>"+soluong+"</td><td>"+chon+"<td></tr>";
+
+                //thêm row vào phần tbody của table
+                $("table tbody").append(row);   
+
+				//xử lý sự kiện nhấn vào nút xóa
+				$(".btnxoagiohang").click(function(){
+				var row = $(this).closest('tr');
+      			row.remove();
+				})
+			})
+
+			//ip13prm
+			$("#btnmua5").click(function(){
+				var anh = '<img src="image/iphone_13-a.jpg" id="txtanh" style="width: 50px; height:50px;" alt="iphone13">'
+				var ten = " iphone13 Pro Max|Chính hãng VNA";
+                var gia = '<input type="number" id="price" name="price" value="36490000">'
+				var soluong = '<input type="number" styte="border: none; background: transparent;" id="quantity" name="quantity" min="1" max="10" step="1" value="1" oninput="calculateTotal()">'
+				var chon = '<button class="btnxoagiohang" onclick = "deleteRow(this)">Xóa</button>'
+
+
+                var row = "<tr><td>"+anh+""+ten+"</td><td>"+gia+"</td><td>"+soluong+"</td><td>"+chon+"<td></tr>";
+
+                //thêm row vào phần tbody của table
+                $("table tbody").append(row);   
+
+				//xử lý sự kiện nhấn vào nút xóa
+				$(".btnxoagiohang").click(function(){
+				var row = $(this).closest('tr');
+      			row.remove();
+				})
+			})
+
+			//ip12prm
+			$("#btnmua6").click(function(){
+				var anh = '<img src="image/iphone-12.jpg" id="txtanh" style="width: 50px; height:50px;" alt="iphone13">'
+				var ten = " iphone12 Pro Max|Chính hãng VNA";
+                var gia = '<input type="number" id="price" name="price" value="25000000">'
+				var soluong = '<input type="number" styte="border: none; background: transparent;" id="quantity" name="quantity" min="1" max="10" step="1" value="1" oninput="calculateTotal()">'
+				var chon = '<button class="btnxoagiohang" onclick = "deleteRow(this)">Xóa</button>'
+
+
+                var row = "<tr><td>"+anh+""+ten+"</td><td>"+gia+"</td><td>"+soluong+"</td><td>"+chon+"<td></tr>";
+
+                //thêm row vào phần tbody của table
+                $("table tbody").append(row);   
+
+				//xử lý sự kiện nhấn vào nút xóa
+				$(".btnxoagiohang").click(function(){
+				var row = $(this).closest('tr');
+      			row.remove();
+				})
+			})
+
+			//ip11prm
+			$("#btnmua7").click(function(){
+				var anh = '<img src="image/iphone-11.webp" id="txtanh" style="width: 50px; height:50px;" alt="iphone13">'
+				var ten = " iphone11 Pro Max|Chính hãng VNA";
+                var gia = '<input type="number" id="price" name="price" value="21490000">'
+				var soluong = '<input type="number" styte="border: none; background: transparent;" id="quantity" name="quantity" min="1" max="10" step="1" value="1" oninput="calculateTotal()">'
+				var chon = '<button class="btnxoagiohang" onclick = "deleteRow(this)">Xóa</button>'
+
+
+                var row = "<tr><td>"+anh+""+ten+"</td><td>"+gia+"</td><td>"+soluong+"</td><td>"+chon+"<td></tr>";
+
+                //thêm row vào phần tbody của table
+                $("table tbody").append(row);   
+
+				//xử lý sự kiện nhấn vào nút xóa
+				$(".btnxoagiohang").click(function(){
+				var row = $(this).closest('tr');
+      			row.remove();
+				})
+			})
+
+			//ip8pl
+			$("#btnmua8").click(function(){
+				var anh = '<img src="image/iphone_8.jpg" id="txtanh" style="width: 50px; height:50px;" alt="iphone13">'
+				var ten = " iphone8 Plus|Chính hãng VNA";
+                var gia = '<input type="number" id="price" name="price" value="8490000">'
+				var soluong = '<input type="number" styte="border: none; background: transparent;" id="quantity" name="quantity" min="1" max="10" step="1" value="1" oninput="calculateTotal()">'
+				var chon = '<button class="btnxoagiohang" onclick = "deleteRow(this)">Xóa</button>'
+
+
+                var row = "<tr><td>"+anh+""+ten+"</td><td>"+gia+"</td><td>"+soluong+"</td><td>"+chon+"<td></tr>";
+
+                //thêm row vào phần tbody của table
+                $("table tbody").append(row);   
+
+				//xử lý sự kiện nhấn vào nút xóa
+				$(".btnxoagiohang").click(function(){
+				var row = $(this).closest('tr');
+      			row.remove();
+				})
+			})
+			function tinhtongtien(){
+				var i=1
+				var k = $("table tbody tr").length;
+				let tongtien = 23490000;
+				if(k==0){
+					return;
+				}
+				if(k>0){
+					for(i;i<=k;i++){
+						var table = document.getElementById("tablegiohang"); // lấy thẻ table
+						var row = table.rows[i]; // lấy hàng thứ i trong table (index bắt đầu từ 0)
+						var col2 = row.cells[1]; // lấy ô thứ 2 trong hàng (index bắt đầu từ 0)
+						var col2Value = col2.innerText; // lấy nội dung của ô
+						tongtien = tongtien + col2Value;
+					}
+					return tongtien;
+					
+				}
+			}
+			
+
+			
+		})
+	</script>
+</head>
+<body>
+	<div class="container">
+		<div class="banner">
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+ 				 <div class="container-fluid">
+   					 <a class="navbar-brand" href="#">
+     					 <img src="image/logo.png" alt="" width="180" height="36">
+   					 </a>
+   					 <div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+							  <li class="nav-item">
+								 <a class="nav-link active" aria-current="page" href="#giohang" style="padding-left: 25px; padding-right: 25px;"><strong>Giỏ hàng</strong></a>
+							  </li>
+							 <li class="nav-item">
+								 <a class="nav-link active" aria-current="page" href="#" style="padding-left: 25px; padding-right: 25px;"><strong>Tra cứu đơn hàng</strong></a>
+							  </li>
+							  <li class="nav-item dropdown">
+								 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding-left: 25px; padding-right: 25px;">
+								 <strong>Chọn địa điểm quán </strong></a>
+								 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+								   <li><a class="dropdown-item" href="#"><strong>Hà Nội</strong></a></li>
+									<li><a class="dropdown-item" href="#"><strong>Hồ Chí Minh</strong></a></li>
+									<li><a class="dropdown-item" href="#"><strong>Nam Định</strong></a></li>
+								 </ul>
+							   </li>
+						</ul>
+						<form class="d-flex">
+							  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width: 200px;">
+							  <button class="btn btn-outline-success" type="submit">Search</button>
+						  </form>
+						</div>
+ 				 </div>
+			</nav>
+		</div>
+		<div class= "container-fluid">
+        		 <div class= "row">
+            		<div class ="col-2 primary">
+             			 <div id="menu">
+                         <ul>
+                         <li><a href="index.html"> <strong>Trang Chủ</strong></a></li>
+                         <li><a href="html/cuahang.html"> <strong>Sản Phẩm</strong></a></li>
+                         <li><a href="html/contact.html"> <strong>Liên Hệ</strong></a></li>
+                         <li><a href="html/FAQS.html"> <strong>FAQS</strong></a></li>
+						 <li><a href="html/dsdangky.html"><strong>Đăng Ký</strong></a></li>
+                         </ul>
+                         </div>
+           			 </div>
+            		<div class ="col-7 bg-white" style="height: 400px;">
+               			<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+  							<div class="carousel-indicators">
+   								 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+   								 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+   								 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+   								  <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+ 							 </div>
+  							<div class="carousel-inner">
+    							<div class="carousel-item active">
+      								<img src="image/slide1.png" class="d-block w-100" alt="..."  style="width: 732px; height: 400px;">
+   								 </div>
+    							<div class="carousel-item" >
+     						 		<img src="image/slide2.jpg" class="d-block w-100" alt="..."  style="width: 732px; height: 400px;">
+    							</div>
+   								 <div class="carousel-item">
+     								 <img src="image/slide3.jpg" class="d-block w-100" alt="..."  style="width: 732px; height: 400px;">
+   								 </div>
+   								 <div class="carousel-item">
+     								 <img src="image/slide4.jpg" class="d-block w-100" alt="..."  style="width: 732px; height: 400px;">
+   								 </div>
+ 							 </div>
+ 							 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+   							 	<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+   								 <span class="visually-hidden">Previous</span>
+ 							 </button>
+ 							 <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+   								 <span class="carousel-control-next-icon" aria-hidden="true"></span>
+  								  <span class="visually-hidden">Next</span>
+  							</button>
+			       		</div>
+			       	</div>
+           			 <div class ="col-3 bg-white">
+              			 <img src="image/qc1.jpg" style="height: 120px; width: 310px;">
+              			  <img src="image/qc2.jpg" style="height:120px; width: 310px; margin-top: 20px;">
+              			  <img src="image/qc3.jpg" style="height:120px; width: 310px; margin-top: 20px;">
+           			 </div>
+         		</div>
+      	</div>
+        <div class="banner">
+      		<img src="image/banner1.webp" alt="" style="width: 1294px; margin-top:20px;">
+      	</div>
+      	<div class="main" style="margin-top: 40px;">
+      		<div class= "container-fluid">
+   				<div class= "row">
+   					 <div class="box-title_title bg-light text-center" >
+   					 	<h2><img src="image/logo2.png" style="height:30px;"><strong>Apple Store</strong></h2>
+   					 </div>
+     					 <div class ="col-md-3 col-sm-6 col-xs-6 wow fadeInUp" style="margin-top:20px;">
+        					 <div class="item-product text-center">
+        					 		<div class="image">
+        					 			<a href="html/iphone13.html"><img src="image/iphone-13b.jpg" id="txtanh" style="width: 200px; height:200px;" alt="iphone13"></a>
+        					 			<h4 id="txttensp" aria-valuetext="iphone13|Chính hãng VNA">iphone13|Chính hãng VNA</h4>
+        					 		</div>
+        					 		<div class="price-c">
+        					 			<p class="price"><s>24.990.000 ₫</s>
+        					 				<br><span class="giamoi" id="giaban">23.490.000 ₫</span>
+        					 			</p>
+        					 		</div>
+        					 		<a href="#giohang"><button type="button" class="btn btn-danger" id="btnmua1">Mua hàng</button></a>
+        					 		<a href="html/iphone13.html"><button type="button" class="btn btn-light">Sản phẩm</button></a>
+        					 </div>
+    					  </div>
+     					 <div class ="col-md-3 col-sm-6 col-xs-6 wow fadeInUp" style="margin-top:20px;">
+        					 <div class="item-product text-center">
+        					 		<div class="image">
+        					 			<a href="html/iphone11.html"><img src="image/iphone11c.jpg" style="width: 200px; height:200px;" alt="iphone11"></a>
+        					 			<h4>iphone11|Chính hãng VNA</h4>
+        					 		</div>
+        					 		<div class="price-c">
+        					 			<p class="price"><s>18.000.000 ₫</s>
+        					 				<br><span class="giamoi">16.000.000 ₫</span>
+        					 			</p>
+        					 		</div>
+        					 		<a href="#giohang"><button type="button" class="btn btn-danger" id="btnmua2">Mua hàng</button></a>
+        					 		<a href="html/iphone11.html"><button type="button" class="btn btn-light">Sản phẩm</button></a>
+        					 </div>
+    					  </div>
+
+    					 <div class ="col-md-3 col-sm-6 col-xs-6 wow fadeInUp" style="margin-top:20px;">
+        					 <div class="item-product text-center">
+        					 		<div class="image">
+        					 			<a href="html/iphone12.html"><img src="image/iphone-12f.webp" style="width: 200px; height:200px;" alt="iphone12"></a>
+        					 			<h4>iphone12|Chính hãng VNA</h4>
+        					 		</div>
+        					 		<div class="price-c">
+        					 			<p class="price"><s>22.990.000 ₫</s>
+        					 				<br><span class="giamoi">19.490.000 ₫</span>
+        					 			</p>
+        					 		</div>
+        					 		<a href="#giohang"><button type="button" class="btn btn-danger" id="btnmua3">Mua hàng</button></a>
+        					 		<a href="html/iphone12.html"><button type="button" class="btn btn-light">Sản phẩm</button></a>
+        					 </div>
+    					  </div>
+     					 <div class ="col-md-3 col-sm-6 col-xs-6 wow fadeInUp" style="margin-top:20px;">
+        					 <div class="item-product text-center">
+        					 		<div class="image">
+        					 			<a href="html/iphone10.html"><img src="image/iphonexb.jpg" style="width: 200px; height:200px;" alt="iphonex"></a>
+        					 			<h4>iphoneX|Chính hãng VNA</h4>
+        					 		</div>
+        					 		<div class="price-c">
+        					 			<p class="price"><s>11.990.000 ₫</s>
+        					 				<br><span class="giamoi">9.490.000 ₫</span>
+        					 			</p>
+        					 		</div>
+									 <a href="#giohang"><button type="button" class="btn btn-danger" id="btnmua4">Mua hàng</button></a>
+        					 		<a href="html/iphone10.html"><button type="button" class="btn btn-light">Sản phẩm</button></a>
+        					 </div>
+    					  </div>
+    					  <hr style="margin-top: 15px;">
+
+     					 <div class ="col-md-3 col-sm-6 col-xs-6 wow fadeInUp" style="margin-top:20px;">
+        					 <div class="item-product text-center">
+        					 		<div class="image">
+        					 			<a href="html/iphone13.html"><img src="image/iphone_13-a.jpg" style="width: 200px; height:200px;" alt="samsung"></a>
+        					 			<h4>iphone 13 Pro Max</h4>
+        					 		</div>
+        					 		<div class="price-c">
+        					 			<p class="price"><s>40.990.000 ₫</s>
+        					 				<br><span class="giamoi">36.490.000 ₫</span>
+        					 			</p>
+        					 		</div>
+        					 		<a href="#giohang"><button type="button" class="btn btn-danger" id="btnmua5">Mua hàng</button></a>
+        					 		<a href="html/iphone13.html"><button type="button" class="btn btn-light">Sản phẩm</button></a>
+        					 </div>
+    					  </div>
+     					 <div class ="col-md-3 col-sm-6 col-xs-6 wow fadeInUp" style="margin-top:20px;">
+        					 <div class="item-product text-center">
+        					 		<div class="image">
+        					 			<a href="html/iphone12promax.html"><img src="image/iphone-12.jpg" style="width: 200px; height:200px;" alt="iphone11"></a>
+        					 			<h4>iphone 12 Pro Max</h4>
+        					 		</div>
+        					 		<div class="price-c">
+        					 			<p class="price"><s>30.000.000 ₫</s>
+        					 				<br><span class="giamoi">25.000.000 ₫</span>
+        					 			</p>
+        					 		</div>
+        					 		<a href="#giohang"><button type="button" class="btn btn-danger" id="btnmua6">Mua hàng</button></a>
+        					 		<a href="html/iphone12promax.html"><button type="button" class="btn btn-light">Sản phẩm</button></a>
+        					 </div>
+    					  </div>
+
+    					 <div class ="col-md-3 col-sm-6 col-xs-6 wow fadeInUp" style="margin-top:20px;">
+        					 <div class="item-product text-center">
+        					 		<div class="image">
+        					 			<a href="html/iphone11.html"><img src="image/iphone-11.webp" style="width: 200px; height:200px;" alt="iphone12"></a>
+        					 			<h4>iphone 11 Pro Max</h4>
+        					 		</div>
+        					 		<div class="price-c">
+        					 			<p class="price"><s>34.990.000 ₫</s>
+        					 				<br><span class="giamoi">21.490.000 ₫</span>
+        					 			</p>
+        					 		</div>
+        					 		<a href="#giohang"><button type="button" class="btn btn-danger" id="btnmua7">Mua hàng</button></a>
+        					 		<a href="html/iphone11.html"><button type="button" class="btn btn-light">Sản phẩm</button></a>
+        					 </div>
+    					  </div>
+     					 <div class ="col-md-3 col-sm-6 col-xs-6 wow fadeInUp" style="margin-top:20px;">
+        					 <div class="item-product text-center">
+        					 		<div class="image">
+        					 			<a href="#"><img src="image/iphone_8.jpg" style="width: 200px; height:200px;" alt="iphonex"></a>
+        					 			<h4>iphone 8 Plus</h4>
+        					 		</div>
+        					 		<div class="price-c">
+        					 			<p class="price"><s>11.990.000 ₫</s>
+        					 				<br><span class="giamoi">8.490.000 ₫</span>
+        					 			</p>
+        					 		</div>
+        					 		<a href="#giohang"><button type="button" class="btn btn-danger" id="btnmua8">Mua hàng</button></a>
+        					 		<a href="html/giohangIphone 8 Plus.html"><button type="button" class="btn btn-light">Sản phẩm</button></a>
+        					 </div>
+    					  </div>
+    				</div>
+    						<nav aria-label="Page navigation example" style="margin-top:20px">
+  <ul class="pagination justify-content-center">
+    <li class="page-item">
+      <a class="page-link" href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item">
+      <a class="page-link" href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+					
+      	</div>
+      	<div class= "container-fluid">
+   				<div class= "row">
+   					 <div class="box-title_title bg-light text-center" >
+   					 	<h2><img src="image/samsung.png" style="height:50px;"></h2>
+   					 </div>
+     					 <div class ="col-md-3 col-sm-6 col-xs-6 wow fadeInUp" style="margin-top:20px;">
+        					 <div class="item-product text-center">
+        					 		<div class="image">
+        					 			<a href="html/iphone13.html"><img src="image/a03s.jpg" style="width: 200px; height:200px;" alt="iphone13"></a>
+        					 			<h4>SamSung Galaxy A03   </h4>
+        					 		</div>
+        					 		<div class="price-c">
+        					 			<p class="price"><s>24.990.000 ₫</s>
+        					 				<br><span class="giamoi">23.490.000 ₫</span>
+        					 			</p>
+        					 		</div>
+        					 		<a href="html/giohangSamSung A03.html"><button type="button" class="btn btn-danger" id="btnmua">Mua hàng</button></a>
+        					 		<a href="html/hidatSamSung.html"><button type="button" class="btn btn-light">Sản phẩm</button></a>
+        					 </div>
+    					  </div>
+     					 <div class ="col-md-3 col-sm-6 col-xs-6 wow fadeInUp" style="margin-top:20px;">
+        					 <div class="item-product text-center">
+        					 		<div class="image">
+        					 			<a href="html/iphone11.html"><img src="image/a12.jpg" style="width: 200px; height:200px;" alt="iphone11"></a>
+        					 			<h4>SamSung Galaxy A12</h4>
+        					 		</div>
+        					 		<div class="price-c">
+        					 			<p class="price"><s>18.000.000 ₫</s>
+        					 				<br><span class="giamoi">16.000.000 ₫</span>
+        					 			</p>
+        					 		</div>
+        					 		<a href="html/giohangIphone 11 ProMax.html"><button type="button" class="btn btn-danger" id="btnmua">Mua hàng</button></a>
+        					 		<a href="html/iphone11.html"><button type="button" class="btn btn-light">Sản phẩm</button></a>
+        					 </div>
+    					  </div>
+
+    					 <div class ="col-md-3 col-sm-6 col-xs-6 wow fadeInUp" style="margin-top:20px;">
+        					 <div class="item-product text-center">
+        					 		<div class="image">
+        					 			<a href="html/iphone12.html"><img src="image/zfold3.jpg" style="width: 200px; height:200px;" alt="iphone12"></a>
+        					 			<h4>SamSung Z Fold 3</h4>
+        					 		</div>
+        					 		<div class="price-c">
+        					 			<p class="price"><s>22.990.000 ₫</s>
+        					 				<br><span class="giamoi">19.490.000 ₫</span>
+        					 			</p>
+        					 		</div>
+        					 		<a href="#"><button type="button" class="btn btn-danger" id="btnmua">Mua hàng</button></a>
+        					 		<a href="html/iphone12.html"><button type="button" class="btn btn-light">Sản phẩm</button></a>
+        					 </div>
+    					  </div>
+     					 <div class ="col-md-3 col-sm-6 col-xs-6 wow fadeInUp" style="margin-top:20px;">
+        					 <div class="item-product text-center">
+        					 		<div class="image">
+        					 			<a href="html/iphone10.html"><img src="image/f20fe.jpg" style="width: 200px; height:200px;" alt="iphonex"></a>
+        					 			<h4>SamSung  S20 FE</h4>
+        					 		</div>
+        					 		<div class="price-c">
+        					 			<p class="price"><s>11.990.000 ₫</s>
+        					 				<br><span class="giamoi">9.490.000 ₫</span>
+        					 			</p>
+        					 		</div>
+        					 		<a href="#"><button type="button" class="btn btn-danger" id="btnmua">Mua hàng</button></a>
+        					 		<a href="html/iphone10.html"><button type="button" class="btn btn-light">Sản phẩm</button></a>
+        					 </div>
+    					  </div>
+    					  <hr style="margin-top: 15px;">
+
+     					 <div class ="col-md-3 col-sm-6 col-xs-6 wow fadeInUp" style="margin-top:20px;">
+        					 <div class="item-product text-center">
+        					 		<div class="image">
+        					 			<a href="#"><img src="image/zflip.webp" style="width: 200px; height:200px;" alt="samsung"></a>
+        					 			<h4>SamSung Galaxy Z Flip</h4>
+        					 		</div>
+        					 		<div class="price-c">
+        					 			<p class="price"><s>40.990.000 ₫</s>
+        					 				<br><span class="giamoi">36.490.000 ₫</span>
+        					 			</p>
+        					 		</div>
+        					 		<a href="#"><button type="button" class="btn btn-danger" id="btnmua">Mua hàng</button></a>
+        					 		<a href="html/iphone13.html"><button type="button" class="btn btn-light">Sản phẩm</button></a>
+        					 </div>
+    					  </div>
+     					 <div class ="col-md-3 col-sm-6 col-xs-6 wow fadeInUp" style="margin-top:20px;">
+        					 <div class="item-product text-center">
+        					 		<div class="image">
+        					 			<a href="#"><img src="image/sss1.jpg" style="width: 200px; height:200px;" alt="iphone11"></a>
+        					 			<h4>SamSung S20 Ultra</h4>
+        					 		</div>
+        					 		<div class="price-c">
+        					 			<p class="price"><s>30.000.000 ₫</s>
+        					 				<br><span class="giamoi">25.000.000 ₫</span>
+        					 			</p>
+        					 		</div>
+        					 		<a href="#"><button type="button" class="btn btn-danger" id="btnmua">Mua hàng</button></a>
+        					 		<a href="html/iphone11.html"><button type="button" class="btn btn-light">Sản phẩm</button></a>
+        					 </div>
+    					  </div>
+
+    					 <div class ="col-md-3 col-sm-6 col-xs-6 wow fadeInUp" style="margin-top:20px;">
+        					 <div class="item-product text-center">
+        					 		<div class="image">
+        					 			<a href="#"><img src="image/ssn1.jpg" style="width: 200px; height:200px;" alt="iphone12"></a>
+        					 			<h4>SamSung  Note 20Ultra</h4>
+        					 		</div>
+        					 		<div class="price-c">
+        					 			<p class="price"><s>34.990.000 ₫</s>
+        					 				<br><span class="giamoi">21.490.000 ₫</span>
+        					 			</p>
+        					 		</div>
+        					 		<a href=""><button type="button" class="btn btn-danger" id="btnmua">Mua hàng</button></a>
+        					 		<a href="html/iphone13.html"><button type="button" class="btn btn-light">Sản phẩm</button></a>
+        					 </div>
+    					  </div>
+     					 <div class ="col-md-3 col-sm-6 col-xs-6 wow fadeInUp" style="margin-top:20px;">
+        					 <div class="item-product text-center">
+        					 		<div class="image">
+        					 			<a href="#"><img src="image/a52s.webp" style="width: 200px; height:200px;" alt="iphonex"></a>
+        					 			<h4>SamSung A52S</h4>
+        					 		</div>
+        					 		<div class="price-c">
+        					 			<p class="price"><s>11.990.000 ₫</s>
+        					 				<br><span class="giamoi">8.490.000 ₫</span>
+        					 			</p>
+        					 		</div>
+        					 		<a href=""><button type="button" class="btn btn-danger" id="btnmua">Mua hàng</button></a>
+        					 		<a href="D:\KTTke web dreamwear. HTML CSS JS year 3\websiteSmartPhone\Khoa Hoc Lap Trinh\iphone13.html"><button type="button" class="btn btn-light">Sản phẩm</button></a>
+        					 </div>
+    					  </div>
+    				</div>
+    						<nav aria-label="Page navigation example" style="margin-top:20px">
+  <ul class="pagination justify-content-center">
+    <li class="page-item">
+      <a class="page-link" href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item">
+      <a class="page-link" href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+					
+      	</div>
+</div>
+	
+	<div class="row bg-secondary" style="color: #fff;">
+		<div class="col-md-12" id="giohang">
+			<h3 style="text-align: center;">Giỏ hàng</h3>
+			<section class="table-responsive">
+				<table class="table" style="color: #fff;" id="tablegiohang">
+					<thead>
+						<tr>
+							<th>Sản phẩm</th>
+							<th>Giá</th>
+							<th>Số lượng</th>
+							<th>Chọn</th>
+						</tr>
+					</thead>
+					<tbody style="color: #fff;">
+
+					</tbody>
+				</table>
+			</section>
+		</div>
+		<hr>
+		<div class="col-md-12" style="text-align: center;">
+			<button class="bg-success" id="btnthanhtoan">Thanh toán</button>
+		</div>
+	</div>
+
+
+	<div style="background:#f1f2f6; margin-top: 50px;">
+        <center>
+        <h3> <strong>Công Ty Cổ Phần TNHH A C E</strong></h3>
+        <p> <strong>Địa chỉ:</strong> Phố Cao Đạt, Hai Bà Trưng, Hà Nội </p>
+        <p> <strong>Số ĐT:</strong> 0945.199.786</p>
+        <p><strong>Mail:</strong> Aceofficial1610@gmail.com</p>
+        <p><strong>Mã số doanh nghiệp:</strong> 200219899 do Sở Kế hoạch & Đầu Tư TP Hà Nội
+Đầu ngày 17/6/2021 @2021 – Bản quyền thuộc về Công Ty Cổ Phần TNHH <strong>A C E</strong></p>
+        
+        </center>
+        </div>
+	</div>
+
+	<div class="modal fade" role="dialog" id="modalthanhtoan">
+        <!--tạo một cái form modal nhỏ-->
+        <div class="modal-dialog">
+            <!--nội dung của modal-->
+            <div class="modal-content">
+                <!--phần header của modal-->
+                <div class="modal-header">
+                    <h2 style="color: red; text-align: center;">THANH TOÁN ĐƠN HÀNG</h2>
+                    <button type="button" class="closemodal">x</button>
+                </div>
+                <!--phần body của modal-->
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label for="txtsdt" style="font-weight: 600;">Số điện thoại</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" name="" id="txtsdt" placeholder="Nhập số điện thoại" size="50" class="form-control">
+                            <span class="text-danger" id="tbsdt">*</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label for="txthoten" style="font-weight: 600;">Họ tên</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" name="" id="txthoten" placeholder="Nhập họ tên" size="50" class="form-control">
+                            <span class="text-danger" id="tbhoten">*</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label for="txtdc" style="font-weight: 600;">Địa chỉ nhận hàng</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" name="" id="txtdc" size="50" class="form-control" placeholder="nhập địa chỉ nhận">
+                            <span class="text-danger" id="tbdc">*</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label for="txtemail" style="font-weight: 600;">Email</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" name="" id="txtemail" size="50" placeholder="điền email: xxxxxx@gmail.com" class="form-control">
+                            <span class="text-danger" id="tbemail">*</span>
+                        </div>
+                    </div>
+					<h5>Tổng tiền: </h5>
+					<input type="text" readonly id="hienthitienthanhtoan">
+                </div>
+                <div class="modal-footer">
+                    <button id="btnluu" class="submit bg-success btn-block" style="width: 100%; color: #fff;">Thanh toán</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+	
+
+</body>
+</html>

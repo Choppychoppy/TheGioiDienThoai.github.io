@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../bootstrap/js/jquery-3.6.4.min.js"></script>
+    <script>
+        function calculateTotal() {
+        const quantity = parseInt(document.getElementById("quantity").value);
+        const price = parseInt(document.getElementById("price").value);
+        const total = quantity * price;
+        document.getElementById("total").value = total;
+}
+    </script>
+</head>
+<body>
+    <label for="quantity">Số lượng:</label>
+<input type="number" id="quantity" name="quantity" min="1" max="10" step="1" value="1" oninput="calculateTotal()">
+<br>
+<label for="price">Giá:</label>
+<input type="number" id="price" name="price" value="10" oninput="calculateTotal()">
+<br>
+<label for="total">Tổng:</label>
+<input type="number" id="total" name="total" readonly>
+
+</body>
+</html>
